@@ -303,9 +303,32 @@ form.addEventListener('submit', function (e) {
   btn.disabled = true;
   btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-circle-notch fa-spin"></i> Envoi en cours…</span>';
 
-  setTimeout(() => {
-    btn.style.display  = 'none';
-    formSuccess.style.display = 'flex';
-    form.reset();
-  }, 1400);
+  fetch('https://kahya-contact.al-barry700.workers.dev', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nom:       form.querySelector('#nom').value.trim(),
+      email:     form.querySelector('#email').value.trim(),
+      telephone: form.querySelector('#telephone').value.trim(),
+      service:   form.querySelector('#service').value,
+      message:   form.querySelector('#message').value.trim(),
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      btn.style.display = 'none';
+      formSuccess.style.display = 'flex';
+      form.reset();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-paper-plane"></i> Envoyer le message</span>';
+      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-paper-plane"></i> Envoyer le message</span>';
+    alert('Erreur réseau. Veuillez réessayer.');
+  });
 });
