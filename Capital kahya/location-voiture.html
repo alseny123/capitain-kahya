@@ -891,8 +891,9 @@
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          document.getElementById('loc-form').style.display = 'none';
+          btn.style.display = 'none';
           document.getElementById('loc-form-success').style.display = 'flex';
+          document.getElementById('loc-form').reset();
         } else {
           btn.disabled = false;
           btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-calendar-check"></i> Envoyer ma demande</span>';
