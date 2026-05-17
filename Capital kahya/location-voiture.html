@@ -851,7 +851,7 @@
       document.getElementById('loc-hero-bg').classList.add('loaded');
     });
 
-    // Simple form handler
+    // Form handler
     document.getElementById('loc-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const required = this.querySelectorAll('[required]');
@@ -866,10 +866,44 @@
           el.style.borderColor = '';
         }
       });
-      if (valid) {
-        this.style.display = 'none';
-        document.getElementById('loc-form-success').style.display = 'flex';
-      }
+      if (!valid) return;
+
+      const btn = this.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-circle-notch fa-spin"></i> Envoi en cours…</span>';
+
+      const dateDebut = document.getElementById('date-debut').value;
+      const dateFin   = document.getElementById('date-fin').value;
+      const vehicule  = document.getElementById('vehicule').value;
+      const message   = document.getElementById('message').value;
+
+      fetch('https://kahya-contact.al-barry700.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom:       document.getElementById('nom').value.trim(),
+          email:     document.getElementById('email').value.trim(),
+          telephone: document.getElementById('telephone').value.trim(),
+          service:   'Location — ' + (vehicule || 'Non spécifié'),
+          message:   'Véhicule : ' + (vehicule || 'Non spécifié') + '\nDu : ' + (dateDebut || 'Non spécifié') + ' au : ' + (dateFin || 'Non spécifié') + '\n\n' + message,
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('loc-form').style.display = 'none';
+          document.getElementById('loc-form-success').style.display = 'flex';
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-calendar-check"></i> Envoyer ma demande</span>';
+          alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="btn-content"><i class="fa-solid fa-calendar-check"></i> Envoyer ma demande</span>';
+        alert('Erreur réseau. Veuillez réessayer.');
+      });
     });
   </script>
 </body>
