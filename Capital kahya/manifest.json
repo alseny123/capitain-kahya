@@ -1,0 +1,22 @@
+{
+  "name": "Capital KAHYA Transit inc.",
+  "short_name": "KAHYA Transit",
+  "description": "Business sans frontières — Automobile, Alimentaire, Logistique",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C1F6B",
+  "theme_color": "#0C1F6B",
+  "lang": "fr-CA",
+  "icons": [
+    {
+      "src": "image/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "image/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
